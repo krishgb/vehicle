@@ -35,11 +35,12 @@ export const TollEntry = (props) => {
     }
 
     if (done) {
-      close();
       const tolls = JSON.parse(localStorage.getItem("tolls"));
       const newtolls = {...tolls,[capitalize(formValues.tollname)]: formValues.vehicles,}
       localStorage.setItem("tolls", JSON.stringify(newtolls));
-      props?.setTableValues(newtolls)
+      if(props.setTableValues)
+      props.setTableValues(newtolls)
+      close();
     }
   };
 

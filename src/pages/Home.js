@@ -32,12 +32,14 @@ export const Home = () => {
   }
 
   const showToll = (toll) => {
-    if(toll === ''){
-      setTableValues(JSON.parse(localStorage.getItem('vehicles') || []))
-      return
+    let allVehicles = JSON.parse(localStorage.getItem('vehicles') || [])
+    if(toll !== ''){
+      allVehicles = allVehicles.filter(t => {
+        if(t.toll == toll)      console.log(t.toll, toll)
+        return  t.toll.toLowerCase()=== toll.toLowerCase()
+      })
     }
-    const newData = tableValues.filter(t => t.toll.toLowerCase()=== toll.toLowerCase())
-    setTableValues([...newData])
+    setTableValues([...allVehicles])
   }
 
   return (

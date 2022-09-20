@@ -27,10 +27,34 @@ export const VehicleEntry = (props) => {
   const submit = (e) => {
     e.preventDefault()
     const vehicles = JSON.parse(localStorage.getItem("vehicles")) || []
-    const newValue = { ...formValues, timestamp: Date.now() }
-    vehicles.push(newValue)
+    let newValue = {}
+    let modified = false
+    for(let i = 0; i < vehicles.length; i++){
+      let vehicle = vehicles[i]
+
+      const t = (Math.abs(Date.now() - vehicle.timestamp))/1000/60/60
+      if(vehicle.vehicleNumber === formValues.vehicleNumber && vehicle.vehicleType === formValues.vehicleType && (t) < 1){
+        modified = true
+        const tolls = JSON.parse(localStorage.getItem('tolls'))
+        const returntariff = tolls[formValues.toll][formValues.vehicleType]['return']
+        newValue = {
+            ...formValues, 
+            tariff: formValues.tariff - returntariff,
+            timestamp: Date.now()
+          }
+        vehicles[i] = newValue
+        break
+      }
+    }
+    newValue = { ...formValues, timestamp: Date.now() }
+    !modified && vehicles.push(newValue)
     localStorage.setItem("vehicles", JSON.stringify(vehicles))
-    props?.setTableValues(vehicles)
+
+
+    if(props.setTableValues){
+      props.setTableValues(vehicles)
+    }
+    close()
   }
 
   return (

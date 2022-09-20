@@ -74,7 +74,7 @@ export const TollList = () => {
         </tbody>
       </table>
 
-      {modals.vehicle && <VehicleEntry setModals={setModals}   />}
+      {modals.vehicle && <VehicleEntry setModals={setModals} setTableValues={null} />}
       {modals.toll && (
         <TollEntry setModals={setModals} setTableValues={setData}/>
       )}
